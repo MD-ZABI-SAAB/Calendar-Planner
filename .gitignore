@@ -16,3 +16,5 @@ dist/
 # IDE and system files
 .vscode/
 .DS_Store
+# Personal task data
+Calender_Planer/tasks.json
