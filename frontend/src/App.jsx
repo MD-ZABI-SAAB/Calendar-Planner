@@ -195,6 +195,28 @@ function App() {
     setInput('')
   }
 
+  // Delete a conversation
+  const deleteChat = (chatId) => {
+    const remainingChats = chats.filter(
+      (chat) => chat.id !== chatId
+    )
+
+    if (remainingChats.length === 0) {
+      const newChat = createChat()
+
+      setChats([newChat])
+      setActiveChatId(newChat.id)
+    } else {
+      setChats(remainingChats)
+
+      if (activeChatId === chatId) {
+        setActiveChatId(remainingChats[0].id)
+      }
+    }
+
+    setInput('')
+  }
+
   return (
     <div className="chat-app">
       <aside className="sidebar">
@@ -212,15 +234,28 @@ function App() {
           <h4>Recent Chats</h4>
 
           {chats.map((chat) => (
-            <button
+            <div
               key={chat.id}
               className={`chat-list-item ${
                 chat.id === activeChatId ? 'active' : ''
               }`}
-              onClick={() => openChat(chat.id)}
             >
-              {chat.title}
-            </button>
+              <button
+                className="chat-title-btn"
+                onClick={() => openChat(chat.id)}
+              >
+                {chat.title}
+              </button>
+
+              <button
+                className="delete-chat-btn"
+                title="Delete conversation"
+                aria-label={`Delete ${chat.title}`}
+                onClick={() => deleteChat(chat.id)}
+              >
+                ×
+              </button>
+            </div>
           ))}
         </div>
 
@@ -267,7 +302,7 @@ function App() {
             </div>
           ))}
 
-          {loading && activeChatId === activeChat?.id && (
+          {loading && activeChat && (
             <div className="message-row assistant">
               <div className="avatar">✦</div>
 
